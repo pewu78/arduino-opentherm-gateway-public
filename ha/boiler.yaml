@@ -1,0 +1,264 @@
+binary_sensor:
+  - platform: mqtt
+    name: "Boiler Online"
+    unique_id: boiler_online
+    state_topic: "homie/OT-Gateway/boiler/online"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+    payload_on: "true"
+    payload_off: "false"
+    device_class: connectivity
+  - platform: mqtt
+    name: "Boiler Fault"
+    unique_id: boiler_fault
+    state_topic: "homie/OT-Gateway/boiler/fault"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/boiler/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_available: "true"
+    payload_not_available: "false"
+    payload_on: "true"
+    payload_off: "false"
+    device_class: problem
+  - platform: mqtt
+    name: "Boiler CH"
+    unique_id: boiler_ch
+    state_topic: "homie/OT-Gateway/boiler/ch"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/boiler/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_available: "true"
+    payload_not_available: "false"
+    payload_on: "true"
+    payload_off: "false"
+    device_class: heat
+  - platform: mqtt
+    name: "Boiler DHW"
+    unique_id: boiler_dhw
+    state_topic: "homie/OT-Gateway/boiler/dhw"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/boiler/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_available: "true"
+    payload_not_available: "false"
+    payload_on: "true"
+    payload_off: "false"
+    device_class: heat
+  - platform: mqtt
+    name: "Boiler Flame"
+    unique_id: boiler_flame
+    state_topic: "homie/OT-Gateway/boiler/flame"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/boiler/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_available: "true"
+    payload_not_available: "false"
+    payload_on: "true"
+    payload_off: "false"
+    device_class: heat
+  - platform: template
+    sensors:
+      boiler_ch_flame:
+        unique_id: boiler_ch_flame
+        friendly_name: "Boiler CH Flame"
+        value_template: "{{ is_state('binary_sensor.boiler_flame','on') and is_state('binary_sensor.boiler_ch','on') }}"
+        availability_template: "{{ is_state('binary_sensor.boiler_online','on') }}"
+        device_class: heat
+      boiler_dhw_flame:
+        unique_id: boiler_dhw_flame
+        friendly_name: "Boiler DHW Flame"
+        value_template: "{{ is_state('binary_sensor.boiler_flame','on') and is_state('binary_sensor.boiler_dhw','on') }}"
+        availability_template: "{{ is_state('binary_sensor.boiler_online','on') }}"
+
+sensor:
+  - platform: mqtt
+    name: "Boiler Modulation"
+    unique_id: boiler_modulation
+    state_topic: "homie/OT-Gateway/boiler/modulation"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/boiler/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_available: "true"
+    payload_not_available: "false"
+    unit_of_measurement: "%"
+    device_class: power_factor
+  - platform: mqtt
+    name: "Boiler Feed Temp"
+    unique_id: boiler_feedtemp
+    state_topic: "homie/OT-Gateway/boiler/feedtemp"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/boiler/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_available: "true"
+    payload_not_available: "false"
+    unit_of_measurement: "°C"
+    device_class: temperature
+  - platform: mqtt
+    name: "Boiler DHW Temp"
+    unique_id: boiler_dhwtemp
+    state_topic: "homie/OT-Gateway/boiler/dhwtemp"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/boiler/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_available: "true"
+    payload_not_available: "false"
+    unit_of_measurement: "°C"
+    device_class: temperature
+  - platform: mqtt
+    name: "Boiler Outside Temp"
+    unique_id: boiler_outsidetemp
+    state_topic: "homie/OT-Gateway/boiler/outsidetemp"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/boiler/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_available: "true"
+    payload_not_available: "false"
+    unit_of_measurement: "°C"
+    device_class: temperature
+  # - platform: mqtt
+  #   name: "Boiler CH Time"
+  #   unique_id: boiler_chtime
+  #   state_topic: "homie/OT-Gateway/boiler/chtime"
+  #   availability:
+  #     - topic: "homie/OT-Gateway/$state"
+  #       payload_available: "ready"
+  #       payload_not_available: "lost"
+  #     - topic: "homie/OT-Gateway/boiler/online"
+  #       payload_available: "true"
+  #       payload_not_available: "false"
+  #   availability_mode: "all"
+  #   payload_available: "true"
+  #   payload_not_available: "false"
+  #   unit_of_measurement: "sec"
+  # - platform: mqtt
+  #   name: "Boiler DHW Time"
+  #   unique_id: boiler_dhwtime
+  #   state_topic: "homie/OT-Gateway/boiler/dhwtime"
+  #   availability:
+  #     - topic: "homie/OT-Gateway/$state"
+  #       payload_available: "ready"
+  #       payload_not_available: "lost"
+  #     - topic: "homie/OT-Gateway/boiler/online"
+  #       payload_available: "true"
+  #       payload_not_available: "false"
+  #   availability_mode: "all"
+  #   payload_available: "true"
+  #   payload_not_available: "false"
+  #   unit_of_measurement: "sec"
+
+  - platform: history_stats
+    name: "Boiler CH time yesterday"
+    # unique_id: boiler_ch_time_yesterday
+    entity_id: binary_sensor.boiler_ch_flame
+    state: "on"
+    type: time
+    end: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    duration:
+      hours: 24
+  - platform: history_stats
+    name: "Boiler CH ratio yesterday"
+    # unique_id: boiler_ch_ratio_yesterday
+    entity_id: binary_sensor.boiler_ch_flame
+    state: "on"
+    type: ratio
+    end: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    duration:
+      hours: 24
+  - platform: history_stats
+    name: "Boiler CH count today"
+    # unique_id: boiler_ch_count_today
+    entity_id: binary_sensor.boiler_ch_flame
+    state: "on"
+    type: count
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+  - platform: history_stats
+    name: "Boiler DHW time yesterday"
+    # unique_id: boiler_dhw_time_yesterday
+    entity_id: binary_sensor.boiler_dhw_flame
+    state: "on"
+    type: time
+    end: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    duration:
+      hours: 24
+  - platform: history_stats
+    name: "Boiler DHW ratio yesterday"
+    # unique_id: boiler_dhw_ratio_yesterday
+    entity_id: binary_sensor.boiler_dhw_flame
+    state: "on"
+    type: ratio
+    end: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    duration:
+      hours: 24
+  - platform: history_stats
+    name: "Boiler DHW count today"
+    # unique_id: boiler_dhw_count_today
+    entity_id: binary_sensor.boiler_dhw_flame
+    state: "on"
+    type: count
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+
+group:
+  boiler:
+    name: Boiler
+    entities:
+      - binary_sensor.boiler_online
+      - binary_sensor.boiler_fault
+      - binary_sensor.boiler_ch
+      - binary_sensor.boiler_dhw
+      - binary_sensor.boiler_flame
+      - sensor.boiler_modulation
+      - sensor.boiler_feedtemp
+      - sensor.boiler_dhwtemp
+      - sensor.boiler_outsidetemp
+      # - sensor.boiler_chtime
+      # - sensor.boiler_dhwtime
+      - sensor.boiler_ch_time_yesterday
+      - sensor.boiler_ch_count_today
+      - sensor.boiler_ch_ratio_yesterday
+      - sensor.boiler_dhw_time_yesterday
+      - sensor.boiler_dhw_count_today
+      - sensor.boiler_dhw_ratio_yesterday

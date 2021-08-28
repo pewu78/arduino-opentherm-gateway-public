@@ -1,0 +1,67 @@
+binary_sensor:
+  - platform: mqtt
+    name: OT Gateway Online
+    unique_id: otg_online
+    device_class: connectivity
+    state_topic: "homie/OT-Gateway/$state"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+    payload_on: "ready"
+    payload_off: "lost"
+
+sensor:
+  - platform: mqtt
+    name: OT Gateway Signal
+    unique_id: otg_signal
+    state_topic: "homie/OT-Gateway/$stats/signal"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+    unit_of_measurement: "dB"
+    device_class: signal_strength
+  - platform: mqtt
+    name: OT Gateway Uptime
+    unique_id: otg_uptime
+    state_topic: "homie/OT-Gateway/$stats/uptime"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+    unit_of_measurement: "sec"
+  - platform: template
+    sensors:
+      otg_uptime_days:
+        unique_id: otg_uptime_days
+        friendly_name: "OT Gateway uptime"
+        value_template: "{{ timedelta(seconds=states('sensor.ot_gateway_uptime') | int) }}"
+        icon_template: "mdi:timelapse"
+        availability_template: "{{ not is_state('sensor.ot_gateway_uptime','unavailable') }}"
+
+group:
+  ot-gateway:
+    name: OT-Gateway
+    entities:
+      - binary_sensor.ot_gateway_online
+      - sensor.ot_gateway_signal
+      - sensor.ot_gateway_uptime
+      - sensor.otg_uptime_days
+      - group.thermostat
+      - group.boiler
+
+alert:
+  otg_online_alert:
+    name: OT Gateway Online Alert
+    title: OT Gateway
+    entity_id: binary_sensor.ot_gateway_online
+    state: off
+    message: OT Gateway is offline!
+    done_message: OT Gateway is back online
+    repeat: 15
+    can_acknowledge: true
+    skip_first: false
+    notifiers:
+      - xxx_tv
+      - mobile_app_xxx

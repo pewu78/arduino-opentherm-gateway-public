@@ -1,0 +1,214 @@
+climate:
+  - platform: mqtt
+    name: "Thermostat CH"
+    unique_id: thermostat_hvac_ch
+    action_template: "{{ {'true': 'heating', 'false': 'off'} [value] | default('off') }}"
+    action_topic: "homie/OT-Gateway/thermostat/ch"
+    # current_temperature_template:
+    current_temperature_topic: "homie/OT-Gateway/thermostat/roomtemp"
+    min_temp: 10
+    max_temp: 30
+    mode_command_template: "{{ {'heat' : 'true', 'off': 'false'} [value] | default('false') }}"
+    mode_command_topic: "homie/OT-Gateway/thermostat/ch/set"
+    mode_state_template: "{{ {'true': 'heat', 'false': 'off'} [value] | default('off') }}"
+    mode_state_topic: "homie/OT-Gateway/thermostat/ch"
+    modes:
+      - "off"
+      - "heat"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/thermostat/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_on: "true"
+    payload_off: "false"
+    send_if_off: false
+    # qos: 2
+    retain: true
+    # temperature_command_template:
+    temperature_command_topic: "homie/OT-Gateway/thermostat/chsetpoint/set"
+    # temperature_state_template:
+    temperature_state_topic: "homie/OT-Gateway/thermostat/chsetpoint"
+    temperature_unit: "C"
+  - platform: mqtt
+    name: "Thermostat DWH"
+    unique_id: thermostat_hvac_dwh
+    action_template: "{{ {'true': 'heating', 'false': 'off'} [value] | default('off') }}"
+    action_topic: "homie/OT-Gateway/thermostat/dhw"
+    # current_temperature_template:
+    current_temperature_topic: "homie/OT-Gateway/boiler/dhwtemp"
+    initial: 45
+    min_temp: 30
+    max_temp: 60
+    mode_command_template: "{{ {'heat' : 'true', 'off': 'false'} [value] | default('false') }}"
+    mode_command_topic: "homie/OT-Gateway/thermostat/dhw/set"
+    mode_state_template: "{{ {'true': 'heat', 'false': 'off'} [value] | default('off') }}"
+    mode_state_topic: "homie/OT-Gateway/thermostat/dhw"
+    modes:
+      - "off"
+      - "heat"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/thermostat/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_on: "true"
+    payload_off: "false"
+    send_if_off: false
+    # qos: 2
+    retain: true
+    # temperature_command_template:
+    temperature_command_topic: "homie/OT-Gateway/thermostat/dhwsetpoint/set"
+    # temperature_state_template:
+    temperature_state_topic: "homie/OT-Gateway/thermostat/dhwsetpoint"
+    temperature_unit: "C"
+
+binary_sensor:
+  - platform: mqtt
+    name: "Thermostat Online"
+    unique_id: thermostat_online
+    device_class: connectivity
+    state_topic: "homie/OT-Gateway/thermostat/online"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+    payload_on: "true"
+    payload_off: "false"
+
+switch:
+  - platform: mqtt
+    name: "Thermostat CH"
+    unique_id: thermostat_ch
+    state_topic: "homie/OT-Gateway/thermostat/ch"
+    command_topic: "homie/OT-Gateway/thermostat/ch/set"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/thermostat/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_on: "true"
+    payload_off: "false"
+    retain: true
+  - platform: mqtt
+    name: "Thermostat DHW"
+    unique_id: thermostat_dhw
+    state_topic: "homie/OT-Gateway/thermostat/dhw"
+    command_topic: "homie/OT-Gateway/thermostat/dhw/set"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/thermostat/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_on: "true"
+    payload_off: "false"
+    retain: true
+  - platform: mqtt
+    name: "Thermostat CH Override"
+    unique_id: thermostat_choverride
+    state_topic: "homie/OT-Gateway/thermostat/choverride"
+    command_topic: "homie/OT-Gateway/thermostat/choverride/set"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/thermostat/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_on: "true"
+    payload_off: "false"
+    retain: true
+  - platform: mqtt
+    name: "Thermostat DHW Override"
+    unique_id: thermostat_dhwoverride
+    state_topic: "homie/OT-Gateway/thermostat/dhwoverride"
+    command_topic: "homie/OT-Gateway/thermostat/dhwoverride/set"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/thermostat/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    payload_on: "true"
+    payload_off: "false"
+    retain: true
+
+number:
+  - platform: mqtt
+    name: "Thermostat CH setpoint"
+    unique_id: thermostat_chsetpoint
+    state_topic: "homie/OT-Gateway/thermostat/chsetpoint"
+    command_topic: "homie/OT-Gateway/thermostat/chsetpoint/set"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/thermostat/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    retain: true
+    # min_value: 10
+    # max_value: 70
+  - platform: mqtt
+    name: "Thermostat DHW setpoint"
+    unique_id: thermostat_dhwsetpoint
+    state_topic: "homie/OT-Gateway/thermostat/dhwsetpoint"
+    command_topic: "homie/OT-Gateway/thermostat/dhwsetpoint/set"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/thermostat/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    retain: true
+    # min_value: 0
+    # max_value: 60
+
+sensor:
+  - platform: mqtt
+    name: "Thermostat Room Temp"
+    unique_id: thermostat_roomtemp
+    state_topic: "homie/OT-Gateway/thermostat/roomtemp"
+    availability:
+      - topic: "homie/OT-Gateway/$state"
+        payload_available: "ready"
+        payload_not_available: "lost"
+      - topic: "homie/OT-Gateway/thermostat/online"
+        payload_available: "true"
+        payload_not_available: "false"
+    availability_mode: "all"
+    unit_of_measurement: "°C"
+    device_class: temperature
+
+group:
+  thermostat:
+    name: Thermostat
+    entities:
+      - climate.thermostat_hvac_ch
+      - climate.thermostat_hvac_dwh
+      - binary_sensor.thermostat_online
+      - switch.thermostat_ch
+      - switch.thermostat_dhw
+      - switch.thermostat_choverride
+      - switch.thermostat_dhwoverride
+      - number.thermostat_chsetpoint
+      - number.thermostat_dhwsetpoint
+      - sensor.thermostat_roomtemp

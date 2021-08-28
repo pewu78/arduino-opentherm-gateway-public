@@ -1,0 +1,21 @@
+{
+  "name": "OT-Gateway",
+  "device_id": "OT-Gateway",
+  "device_stats_interval": 60,
+  "wifi": {
+    "ssid": "MYSSID",
+    "password": "MYPASSWORD"
+  },
+  "mqtt": {
+    "host": "MYHOSTIP",
+    "port": 1883,
+    "base_topic": "homie/",
+    "auth": true,
+    "username": "MYMQTTUSERNAME",
+    "password": "MYMQTTPASSWORD",
+    "ssl": false
+  },
+  "ota": {
+    "enabled": true
+  }
+}
